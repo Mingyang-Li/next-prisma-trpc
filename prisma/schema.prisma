@@ -21,12 +21,14 @@ model Post {
 model AuthToken {
   id        String  @id @default(uuid())
   token     String?
-  tenantUrl String?
+  expiresIn Int?
+  createdAt DateTime @default(now())
+  updatedAt DateTime @default(now()) @updatedAt
 }
 
 model DID {
   id        String   @id @default(uuid())
-  did       Json?
+  did       Json
   role      Role?
   createdAt DateTime @default(now())
   updatedAt DateTime @default(now()) @updatedAt
@@ -34,7 +36,7 @@ model DID {
 
 model PresentationTemplate {
   id                   String   @id @default(uuid())
-  presentationTemplate Json?
+  presentationTemplate Json
   createdAt            DateTime @default(now())
   updatedAt            DateTime @default(now()) @updatedAt
 }
