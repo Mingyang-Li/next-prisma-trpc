@@ -11,12 +11,44 @@ generator client {
 }
 
 model Post {
-  id    String @id @default(uuid())
-  title String
-  text  String
-
-  // To return `Date`s intact through the API we need to add data transformers
-  // https://trpc.io/docs/data-transformers
+  id        String   @id @default(uuid())
+  title     String
+  text      String
   createdAt DateTime @default(now())
   updatedAt DateTime @default(now()) @updatedAt
+}
+
+model AuthToken {
+  id        String  @id @default(uuid())
+  token     String?
+  tenantUrl String?
+}
+
+model DID {
+  id        String   @id @default(uuid())
+  did       Json?
+  role      Role?
+  createdAt DateTime @default(now())
+  updatedAt DateTime @default(now()) @updatedAt
+}
+
+model PresentationTemplate {
+  id                   String   @id @default(uuid())
+  presentationTemplate Json?
+  createdAt            DateTime @default(now())
+  updatedAt            DateTime @default(now()) @updatedAt
+}
+
+model PresentationRequest {
+  id        String   @id @default(uuid())
+  verified  Boolean  @default(false)
+  challenge String?
+  claims    Json?
+  createdAt DateTime @default(now())
+  updatedAt DateTime @default(now()) @updatedAt
+}
+
+enum Role {
+  Issuer
+  Verifier
 }
