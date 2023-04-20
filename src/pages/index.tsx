@@ -13,10 +13,15 @@ const IndexPage: NextPageWithLayout = () => {
     },
   });
 
+  const deletePost = trpc.useMutation('post.delete', {
+    async onSuccess() {
+      await utils.invalidateQueries(['post.all']);
+    },
+  });
+
   return (
     <>
       <h1>Home page</h1>
-      <button onClick={() => router.push('/qr-code')}>Get QR code</button>
 
       <h2>
         Posts
@@ -28,6 +33,11 @@ const IndexPage: NextPageWithLayout = () => {
           <Link href={`/post/${item.id}`}>
             <a>View more</a>
           </Link>
+          <button
+            onClick={async () => await deletePost.mutateAsync({ id: item.id })}
+          >
+            Delete
+          </button>
         </article>
       ))}
 
