@@ -7,26 +7,19 @@ const IndexPage: NextPageWithLayout = () => {
   const postsQuery = trpc.useQuery(['post.all']);
   const addPost = trpc.useMutation('post.add', {
     async onSuccess() {
-      // refetches posts after a post is added
       await utils.invalidateQueries(['post.all']);
     },
   });
 
-  // prefetch all posts for instant navigation
-  // useEffect(() => {
-  //   for (const { id } of postsQuery.data ?? []) {
-  //     utils.prefetchQuery(['post.byId', { id }]);
-  //   }
-  // }, [postsQuery.data, utils]);
+  const deletePost = trpc.useMutation('post.delete', {
+    async onSuccess() {
+      await utils.invalidateQueries(['post.all']);
+    },
+  });
 
   return (
     <>
-      <h1>Welcome to your tRPC starter!</h1>
-      <p>
-        Check <a href="https://trpc.io/docs">the docs</a> whenever you get
-        stuck, or ping <a href="https://twitter.com/alexdotjs">@alexdotjs</a> on
-        Twitter.
-      </p>
+      <h1>Home page</h1>
 
       <h2>
         Posts
@@ -38,6 +31,11 @@ const IndexPage: NextPageWithLayout = () => {
           <Link href={`/post/${item.id}`}>
             <a>View more</a>
           </Link>
+          <button
+            onClick={async () => await deletePost.mutateAsync({ id: item.id })}
+          >
+            Delete
+          </button>
         </article>
       ))}
 
@@ -90,29 +88,3 @@ const IndexPage: NextPageWithLayout = () => {
 };
 
 export default IndexPage;
-
-/**
- * If you want to statically render this page
- * - Export `appRouter` & `createContext` from [trpc].ts
- * - Make the `opts` object optional on `createContext()`
- *
- * @link https://trpc.io/docs/ssg
- */
-// export const getStaticProps = async (
-//   context: GetStaticPropsContext<{ filter: string }>,
-// ) => {
-//   const ssg = createSSGHelpers({
-//     router: appRouter,
-//     ctx: await createContext(),
-//   });
-//
-//   await ssg.fetchQuery('post.all');
-//
-//   return {
-//     props: {
-//       trpcState: ssg.dehydrate(),
-//       filter: context.params?.filter ?? 'all',
-//     },
-//     revalidate: 1,
-//   };
-// };
