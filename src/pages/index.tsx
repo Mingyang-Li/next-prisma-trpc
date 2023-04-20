@@ -1,10 +1,8 @@
 import { trpc } from '../utils/trpc';
 import { NextPageWithLayout } from './_app';
 import Link from 'next/link';
-import { useRouter } from 'next/router';
 
 const IndexPage: NextPageWithLayout = () => {
-  const router = useRouter();
   const utils = trpc.useContext();
   const postsQuery = trpc.useQuery(['post.all']);
   const addPost = trpc.useMutation('post.add', {

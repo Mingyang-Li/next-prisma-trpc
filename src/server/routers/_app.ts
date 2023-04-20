@@ -1,8 +1,6 @@
-/**
- * This file contains the root router of your tRPC-backend
- */
+import { issuanceRouter } from '~/server/routers/issuance.router';
 import { createRouter } from '../createRouter';
-import { postRouter } from './post';
+import { postRouter } from './post.router';
 import superjson from 'superjson';
 
 export const appRouter = createRouter()
@@ -12,6 +10,7 @@ export const appRouter = createRouter()
       return 'yay!';
     },
   })
-  .merge('post.', postRouter);
+  .merge('post.', postRouter)
+  .merge('issuance.', issuanceRouter);
 
 export type AppRouter = typeof appRouter;
